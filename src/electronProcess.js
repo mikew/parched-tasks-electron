@@ -1,5 +1,6 @@
 import path from 'path'
 import fs from 'fs'
+import treeKill from 'tree-kill'
 
 import { spawn } from 'child_process'
 
@@ -41,10 +42,7 @@ export function startProcess () {
     'public/',
     '--enable-logging',
     '--remote-debugging-port=9222',
-  ], {
-    shell: true,
-    detached: true,
-  })
+  ])
 
   // Pipe through stdio
   electronProcess.stdout.on('data', x => process.stdout.write(x))
@@ -64,13 +62,10 @@ export function killProcess () {
     return
   }
 
-  process.kill(-electronProcess.pid, 'SIGINT')
+  treeKill(electronProcess.pid, 'SIGINT')
 }
 
 export function restartProcess () {
   shouldRestart = true
   killProcess()
 }
-
-// Kill electron when the main process is killed
-process.on('SIGINT', killProcess)

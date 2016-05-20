@@ -1,6 +1,6 @@
 {
   "name": "parched-tasks-electron",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Run Electron main-process files through Parched",
   "main": "lib/index.js",
   "scripts": {
@@ -12,5 +12,8 @@
     "electron"
   ],
   "author": "Mike Wyatt <wyatt.mike@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "tree-kill": "^1.1.0"
+  }
 }
