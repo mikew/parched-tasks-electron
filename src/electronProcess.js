@@ -44,7 +44,6 @@ export function startProcess () {
   // We need shell and detached to easily kill the group
   electronProcess = spawn(findElectronBin(), [
     'public/',
-    '--enable-logging',
     '--remote-debugging-port=9222',
   ])
 
