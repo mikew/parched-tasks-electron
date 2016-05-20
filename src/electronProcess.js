@@ -27,6 +27,7 @@ function findElectronBin () {
 
 let electronProcess
 let shouldRestart
+let isFirstRestart = true
 
 export function startProcess () {
   if (electronProcess) {
@@ -68,6 +69,16 @@ export function killProcess () {
 }
 
 export function restartProcess () {
+  if (isFirstRestart) {
+    isFirstRestart = false
+    return
+  }
+
+  if (!electronProcess) {
+    startProcess()
+    return
+  }
+
   shouldRestart = true
   killProcess()
 }
