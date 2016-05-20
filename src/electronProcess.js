@@ -14,7 +14,11 @@ function findElectronBin () {
 
   let i = electronBasePaths.length
   while (i--) {
-    const testPath = path.join(...electronBasePaths[i], 'electron')
+    const testPath = path.join(
+        ...electronBasePaths[i],
+        process.platform === 'win32' ? 'electron.cmd' : 'electron'
+      )
+
     if (fs.existsSync(testPath)) {
       return testPath
     }
