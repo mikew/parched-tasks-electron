@@ -19,7 +19,7 @@ export default function (Parched) {
   }
 
   // Run these in parallel
-  gulp.task('electron-copy-all', [
+  gulp.task('electron-copy-all', false, [
     'electron-copy-app',
     'electron-copy-app-modules',
   ])
@@ -42,13 +42,13 @@ export default function (Parched) {
   })
 
   // Copy over node_modules
-  gulp.task('electron-copy-app-modules', function () {
+  gulp.task('electron-copy-app-modules', false, function () {
     return gulp
         .src(`${options.src}/node_modules/**/*`, { base: options.src })
         .pipe(gulp.dest(`${options.dest}/`))
   })
 
-  gulp.task('electron-watch', function (done) {
+  gulp.task('electron-watch', false, function (done) {
     // Recompile files in options.src when changed
     Parched.vendor.watch([
       `${options.src}/**/*`,
