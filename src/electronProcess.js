@@ -15,9 +15,9 @@ function findElectronBin () {
   let i = electronBasePaths.length
   while (i--) {
     const testPath = path.join(
-        ...electronBasePaths[i],
-        process.platform === 'win32' ? 'electron.cmd' : 'electron'
-      )
+      ...electronBasePaths[i],
+      process.platform === 'win32' ? 'electron.cmd' : 'electron'
+    )
 
     if (fs.existsSync(testPath)) {
       return testPath
@@ -40,8 +40,7 @@ export function startProcess () {
 
   shouldRestart = false
 
-  // Start electron with loggin and debugger
-  // We need shell and detached to easily kill the group
+  // Start electron with debugger
   electronProcess = spawn(findElectronBin(), [
     'public/',
     '--remote-debugging-port=9222',
