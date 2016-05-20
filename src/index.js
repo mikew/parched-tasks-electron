@@ -2,14 +2,21 @@ import {
   restartProcess,
 } from './electronProcess'
 
+const defaults = {
+  src: 'electron-app',
+  dest: 'public',
+}
+
 export default function (Parched) {
   Parched.addDependencyToWatch('electron-copy-all')
   Parched.addDependencyToWatch('electron-watch')
   Parched.addDependencyToBuild('electron-copy-all')
 
   const gulp = Parched.vendor.gulp()
-  const srcDir = 'electron-app'
-  const destDir = 'public'
+  const options = {
+    ...defaults,
+    ...(Parched.getAppConfig().electron || {}),
+  }
 
   // Run these in parallel
   gulp.task('electron-copy-all', [
@@ -22,14 +29,14 @@ export default function (Parched) {
   Parched.createTask({
     taskName: 'electron-copy-app',
     src: [
-      `${srcDir}/**/*`,
-      `!${srcDir}/node_modules/**/*`,
+      `${options.src}/**/*`,
+      `!${options.src}/node_modules/**/*`,
     ],
     sequence: [
       'transform',
     ],
     afterTransform (stream) {
-      return stream.pipe(gulp.dest(`${destDir}/`))
+      return stream.pipe(gulp.dest(`${options.dest}/`))
           .on('end', restartProcess)
     }
   })
@@ -37,14 +44,14 @@ export default function (Parched) {
   // Copy over node_modules
   gulp.task('electron-copy-app-modules', function () {
     return gulp
-        .src(`${srcDir}/node_modules/**/*`, { base: srcDir })
-        .pipe(gulp.dest(`${destDir}/`))
+        .src(`${options.src}/node_modules/**/*`, { base: options.src })
+        .pipe(gulp.dest(`${options.dest}/`))
   })
 
   gulp.task('electron-watch', function (done) {
-    // Recompile files in srcDir when changed
+    // Recompile files in options.src when changed
     Parched.vendor.watch([
-      `${srcDir}/**/*`,
+      `${options.src}/**/*`,
     ], function () {
       gulp.start('electron-copy-app')
     })
